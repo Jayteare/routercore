@@ -1,0 +1,10 @@
+{
+  "workflow": "grant_iam_role",
+  "required_fields": ["principal", "role", "scope"],
+  "optional_fields": ["environment", "duration"],
+  "blocked_values": {
+    "role": ["owner", "admin"]
+  },
+  "risk_level": "high",
+  "requires_confirmation": true
+}

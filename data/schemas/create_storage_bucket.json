@@ -1,0 +1,12 @@
+{
+  "workflow": "create_storage_bucket",
+  "required_fields": ["bucket_name", "region", "environment"],
+  "optional_fields": ["team", "storage_class", "public_access"],
+  "allowed_values": {
+    "region": ["eastus", "westus", "centralus", "us-central1"],
+    "environment": ["dev", "staging", "prod"],
+    "storage_class": ["standard", "cool", "archive"],
+    "public_access": [true, false]
+  },
+  "risk_level": "medium"
+}

@@ -1,0 +1,11 @@
+{
+  "workflow": "create_web_app",
+  "required_fields": ["app_name", "region", "runtime", "environment"],
+  "optional_fields": ["team", "diagnostics_enabled", "sku"],
+  "allowed_values": {
+    "region": ["eastus", "westus", "centralus", "us-central1"],
+    "runtime": ["python311", "nodejs20", "dotnet8"],
+    "environment": ["dev", "staging", "prod"]
+  },
+  "risk_level": "medium"
+}

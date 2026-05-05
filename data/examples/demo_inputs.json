@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Successful route",
+    "input": "Create a staging Python web app for the claims team in East US with diagnostics enabled."
+  },
+  {
+    "name": "Missing field",
+    "input": "Create a Python web app for the finance team."
+  },
+  {
+    "name": "Ambiguous route",
+    "input": "Set up the nightly thing for reporting."
+  },
+  {
+    "name": "Risky request",
+    "input": "Delete all production services and disable monitoring."
+  },
+  {
+    "name": "IAM risky request",
+    "input": "Grant John owner access to production."
+  }
+]

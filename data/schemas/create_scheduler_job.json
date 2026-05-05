@@ -1,0 +1,10 @@
+{
+  "workflow": "create_scheduler_job",
+  "required_fields": ["job_name", "schedule", "target", "environment"],
+  "optional_fields": ["timezone", "team", "retry_policy"],
+  "allowed_values": {
+    "environment": ["dev", "staging", "prod"],
+    "timezone": ["UTC", "America/Los_Angeles", "America/New_York"]
+  },
+  "risk_level": "medium"
+}
