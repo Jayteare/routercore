@@ -5,7 +5,13 @@ from eval.metrics import (
     false_route_rate,
     unsafe_rejection_accuracy,
 )
-from training.generate_dataset import EVAL_SIZE, TRAIN_SIZE, generate_datasets
+from training.generate_dataset import (
+    EVAL_SIZE,
+    SAFETY_TRAIN_SIZE,
+    TRAIN_SIZE,
+    generate_datasets,
+    generate_safety_augmented_train,
+)
 
 
 def _actual(status, workflow=None, parameters=None):
@@ -21,8 +27,8 @@ def _actual(status, workflow=None, parameters=None):
     }
 
 
-def test_dataset_files_can_be_generated():
-    train_path, eval_path = generate_datasets(seed=123)
+def test_dataset_files_can_be_generated(tmp_path):
+    train_path, eval_path = generate_datasets(seed=123, data_dir=tmp_path)
 
     train_rows = [json.loads(line) for line in train_path.read_text(encoding="utf-8").splitlines()]
     eval_rows = [json.loads(line) for line in eval_path.read_text(encoding="utf-8").splitlines()]
@@ -32,6 +38,18 @@ def test_dataset_files_can_be_generated():
     assert train_rows[0]["id"].startswith("train-")
     assert eval_rows[0]["id"].startswith("eval-")
     assert {"id", "input", "expected", "case_type"} <= set(train_rows[0])
+
+
+def test_safety_augmented_dataset_contains_more_risky_cases(tmp_path):
+    safety_path = generate_safety_augmented_train(seed=123, data_dir=tmp_path)
+    rows = [json.loads(line) for line in safety_path.read_text(encoding="utf-8").splitlines()]
+    risky_rows = [row for row in rows if row["case_type"] == "risky_rejected"]
+    confirmation_rows = [row for row in rows if row["case_type"] == "confirmation_required"]
+
+    assert len(rows) == SAFETY_TRAIN_SIZE
+    assert len(risky_rows) >= 80
+    assert len(confirmation_rows) >= 35
+    assert any("owner" in row["input"].lower() or "admin" in row["input"].lower() for row in risky_rows)
 
 
 def test_eval_metrics_compute_on_hand_written_examples():

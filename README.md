@@ -36,6 +36,7 @@ RouterCore is intentionally not a cloud execution platform. It never creates inf
 - [Submission Notes](docs/submission_notes.md)
 - [Evaluation Comparison](docs/eval_comparison.md)
 - [Architecture Diagram](docs/architecture.md)
+- [AMD Round 2 Safety Plan](docs/amd_round2_safety_plan.md)
 
 ## Evaluation Plan
 
@@ -101,6 +102,19 @@ python -m eval.run_lora_eval \
 ```
 
 This fine-tunes a compact open-source model to emit the RouterCore JSON contract from natural-language DevOps requests, then compares the LoRA adapter against `FakeRouter` and the prompted base model path.
+
+For the next safety-focused AMD iteration, generate a safety-augmented training split and train a second adapter:
+
+```bash
+python -m training.generate_dataset --safety-augmented
+python -m training.format_dataset \
+  --train-input data/train_safety.jsonl \
+  --eval-input data/eval.jsonl \
+  --train-output data/routercore_train_safety_instruct.jsonl \
+  --eval-output data/routercore_eval_instruct.jsonl
+```
+
+See [AMD Round 2 Safety Plan](docs/amd_round2_safety_plan.md) for the full ROCm command sequence.
 
 ## Example Flow
 
