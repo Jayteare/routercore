@@ -15,7 +15,7 @@ RouterCore is a safe routing layer for agentic DevOps workflows. It converts nat
 
 RouterCore demonstrates the step before agent execution: deciding whether a user request should be routed, clarified, confirmed, rejected, or sent to fallback. The MVP includes a deterministic router, schema validator, policy engine, iterative clarification state, and execution-preview orchestrator. It intentionally does not execute real cloud or infrastructure actions.
 
-For the AMD Developer Hackathon, RouterCore is framed as a Track 2 fine-tuning project. It includes synthetic train/eval data, FakeRouter baseline evaluation, optional prompted Hugging Face model evaluation, and a LoRA fine-tuning path designed for AMD Developer Cloud with ROCm. The goal is to improve structured router proposals while preserving validation and policy redundancy.
+For the AMD Developer Hackathon, RouterCore is framed as a Track 2 fine-tuning project. It includes synthetic train/eval data, FakeRouter baseline evaluation, optional prompted Hugging Face model evaluation, and a LoRA fine-tuning path designed for AMD Developer Cloud with ROCm. A compact Qwen LoRA run on an AMD Instinct MI300X VM improved required-field presence from 28.57% to 91.84% and status accuracy from 57.33% to 80.00%. The goal is to improve structured router proposals while preserving validation and policy redundancy.
 
 ## Suggested Tags
 
@@ -44,7 +44,7 @@ RouterCore also has a Track 1-style agent workflow demo, but the strongest judgi
 - README with setup instructions
 - Baseline evaluation report
 - Evaluation comparison report
-- Notes on the LoRA fine-tuning plan and AMD ROCm readiness
+- Notes on the LoRA fine-tuning run and AMD ROCm results
 
 ## What To Include In The Video
 
@@ -54,7 +54,7 @@ RouterCore also has a Track 1-style agent workflow demo, but the strongest judgi
 - A missing-field clarification.
 - A risky IAM owner request rejected by policy.
 - Baseline metrics and what they imply.
-- Fine-tuning plan on AMD Developer Cloud with ROCm.
+- Fine-tuning result on AMD Developer Cloud with ROCm.
 
 ## What To Include In The Slide Deck
 
@@ -64,7 +64,7 @@ RouterCore also has a Track 1-style agent workflow demo, but the strongest judgi
 - Policy redundancy examples
 - Demo screenshots
 - Baseline metrics table
-- Fine-tuning objective and eval plan
+- AMD LoRA fine-tuning result and eval comparison
 - Next steps
 
 ## Hugging Face Space Deployment Notes

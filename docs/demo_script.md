@@ -46,4 +46,4 @@ Grant John owner access to production.
 
 ### Closing Fine-Tuning Plan
 
-"The Track 2 plan is to fine-tune a compact Hugging Face causal model with LoRA on AMD Developer Cloud using ROCm. The goal is to improve structured routing quality while keeping validation and policy redundancy in place. RouterCore is not trying to replace safety rules with a model. It is trying to make the model's proposal better before policy makes the final call."
+"The Track 2 result is a compact Hugging Face causal model fine-tuned with LoRA on AMD Developer Cloud using ROCm. It improved required-field presence from 28.57% to 91.84% and status accuracy from 57.33% to 80.00%. The safety metrics also show why RouterCore keeps validation and policy authoritative: the LoRA model improves the proposal, but policy still needs to guard unsafe requests and false routes."

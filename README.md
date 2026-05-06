@@ -2,7 +2,7 @@
 
 RouterCore is a focused proof-of-concept for the AMD Developer Hackathon. It shows how a lightweight routing model can make agentic systems safer and more reliable by converting messy natural-language requests into validated workflow routes, structured parameters, and policy-aware handoff previews.
 
-The project fits Track 2, Fine-Tuning on AMD GPUs, while still presenting a Track 1-style agent workflow demo. The MVP uses a deterministic `FakeRouter` so the app works immediately, and keeps a clean boundary for replacing that router with a fine-tuned Hugging Face model later.
+The project fits Track 2, Fine-Tuning on AMD GPUs, while still presenting a Track 1-style agent workflow demo. The MVP uses a deterministic `FakeRouter` so the app works immediately, and includes a LoRA fine-tuning/evaluation path that was run on AMD Developer Cloud with ROCm.
 
 ## Core Thesis
 
@@ -12,9 +12,11 @@ The router is only a recommender. The validator and policy layer provide redunda
 
 ## AMD Hackathon Fit
 
-RouterCore is designed for Track 2: Fine-Tuning on AMD GPUs. The next milestone is fine-tuning a compact open-source model on AMD Developer Cloud with ROCm, then comparing it against the deterministic router and a prompted base model.
+RouterCore is designed for Track 2: Fine-Tuning on AMD GPUs. A compact Qwen router was fine-tuned with LoRA on AMD Developer Cloud using ROCm, then evaluated against the deterministic router baseline.
 
 It also demonstrates a Track 1-style agentic workflow pattern through the router, validator, policy layer, clarification loop, and orchestrator preview. The demo stays intentionally scoped: it previews execution plans but does not run cloud or infrastructure actions.
+
+Current AMD LoRA result: required-field presence improved from `28.57%` to `91.84%`, workflow accuracy improved from `97.01%` to `100.00%`, and status accuracy improved from `57.33%` to `80.00%`. Safety metrics also show why policy redundancy matters: the fine-tuned router had `75.00%` unsafe rejection accuracy and a `6.67%` false route rate, while the conservative policy-backed FakeRouter baseline stayed at `100.00%` unsafe rejection and `0.00%` false routes.
 
 ## What It Demonstrates
 
@@ -52,7 +54,7 @@ False route rate measures how often the system confidently routes a request that
 
 `training/generate_dataset.py` creates deterministic synthetic `data/train.jsonl` and `data/eval.jsonl` files across success, missing-field, ambiguous, risky-rejected, and confirmation-required cases. The dataset is designed to train and evaluate the router output contract without calling external LLM APIs.
 
-The current baseline is `FakeRouter`, evaluated through the same router, validator, policy, and orchestrator decision path used by the app. Future runs can compare this baseline against a prompted base model and a fine-tuned router model using the same eval set and metrics.
+The current baseline is `FakeRouter`, evaluated through the same router, validator, policy, and orchestrator decision path used by the app. The AMD LoRA run uses the same eval set and metrics, making the before/after comparison direct.
 
 False route rate matters because safe agent systems should avoid confidently handing off requests that needed clarification, confirmation, or rejection. A router that looks accurate but has a high false route rate is unsafe for agent execution.
 
@@ -76,7 +78,7 @@ This path is optional and local-friendly. It does not call paid APIs, and it is 
 
 ## LoRA Fine-Tuning
 
-RouterCore includes an optional LoRA training path for AMD Developer Cloud / ROCm, and it can also run anywhere PyTorch supports the selected model.
+RouterCore includes an optional LoRA training path for AMD Developer Cloud / ROCm, and it can also run anywhere PyTorch supports the selected model. The included `routercore-qwen-lora` evaluation artifact was produced from an AMD Developer Cloud ROCm run on an AMD Instinct MI300X VM.
 
 ```bash
 python -m training.format_dataset
@@ -98,7 +100,7 @@ python -m eval.run_lora_eval \
   --limit 25
 ```
 
-This is intended to fine-tune a compact open-source model to emit the RouterCore JSON contract from natural-language DevOps requests, then compare the LoRA adapter against `FakeRouter` and the prompted base model.
+This fine-tunes a compact open-source model to emit the RouterCore JSON contract from natural-language DevOps requests, then compares the LoRA adapter against `FakeRouter` and the prompted base model path.
 
 ## Example Flow
 
@@ -143,9 +145,9 @@ Then open the local Gradio URL printed by the command.
 pytest
 ```
 
-## Fine-Tuning Plan
+## Fine-Tuning Result
 
-The current router is deterministic on purpose. Future work can replace `FakeRouter` with a fine-tuned model that emits the same router output contract:
+The current router is deterministic on purpose. The LoRA experiment fine-tunes a compact model to emit the same router output contract:
 
 ```json
 {
@@ -160,7 +162,7 @@ The current router is deterministic on purpose. Future work can replace `FakeRou
 }
 ```
 
-The `training/` folder includes stubs for dataset generation, LoRA training, and inference. A hackathon extension would fine-tune a compact model with Hugging Face Transformers and PEFT on AMD GPUs with ROCm, then deploy the Gradio demo as a Hugging Face Space.
+The `training/` folder includes dataset formatting, LoRA training, inference, and LoRA evaluation scripts. The first AMD Developer Cloud / ROCm run improved structured routing quality substantially, especially required-field extraction, while showing the next safety target: reduce false routes and improve unsafe rejection without losing the LoRA gains.
 
 ## Why Policy Redundancy Matters
 
