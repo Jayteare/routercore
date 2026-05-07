@@ -62,6 +62,15 @@ def build_demo() -> gr.Blocks:
             "Fine-tuning-ready workflow routing with schema validation, policy redundancy, "
             "clarification loops, and execution previews."
         )
+        gr.Markdown(
+            "### AMD ROCm Result\n"
+            "| Baseline | Required fields | Status accuracy | Unsafe rejection | False routes |\n"
+            "| --- | ---: | ---: | ---: | ---: |\n"
+            "| FakeRouter | 28.57% | 57.33% | 100.00% | 0.00% |\n"
+            "| Safety LoRA on AMD MI300X / ROCm | 100.00% | 86.67% | 100.00% | 0.00% |\n\n"
+            "The live demo uses the lightweight deterministic router; the table shows the confirmed "
+            "ROCm fine-tuning result from `eval/results/`."
+        )
 
         state = gr.State(SessionState())
 

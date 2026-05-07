@@ -1,3 +1,10 @@
+---
+title: RouterCore
+sdk: gradio
+app_file: app.py
+python_version: "3.11"
+---
+
 # RouterCore
 
 RouterCore is a focused proof-of-concept for the AMD Developer Hackathon. It shows how a lightweight routing model can make agentic systems safer and more reliable by converting messy natural-language requests into validated workflow routes, structured parameters, and policy-aware handoff previews.
@@ -152,6 +159,11 @@ python -m app.gradio_app
 ```
 
 Then open the local Gradio URL printed by the command.
+
+## Hugging Face Space
+
+Live demo:
+[https://lablab-ai-amd-developer-hackathon-routercore.hf.space](https://lablab-ai-amd-developer-hackathon-routercore.hf.space)
 
 ## Run Tests
 
