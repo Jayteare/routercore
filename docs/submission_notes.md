@@ -15,7 +15,7 @@ RouterCore is a safe routing layer for agentic DevOps workflows. It converts nat
 
 RouterCore demonstrates the step before agent execution: deciding whether a user request should be routed, clarified, confirmed, rejected, or sent to fallback. The MVP includes a deterministic router, schema validator, policy engine, iterative clarification state, and execution-preview orchestrator. It intentionally does not execute real cloud or infrastructure actions.
 
-For the AMD Developer Hackathon, RouterCore is framed as a Track 2 fine-tuning project. It includes synthetic train/eval data, FakeRouter baseline evaluation, optional prompted Hugging Face model evaluation, and a LoRA fine-tuning path designed for AMD Developer Cloud with ROCm. A compact Qwen LoRA run on an AMD Instinct MI300X VM improved required-field presence from 28.57% to 91.84% and status accuracy from 57.33% to 80.00%. The goal is to improve structured router proposals while preserving validation and policy redundancy.
+For the AMD Developer Hackathon, RouterCore is framed as a Track 2 fine-tuning project. It includes synthetic train/eval data, FakeRouter baseline evaluation, optional prompted Hugging Face model evaluation, and a LoRA fine-tuning path designed for AMD Developer Cloud with ROCm. A safety-tuned compact Qwen LoRA run on an AMD Instinct MI300X VM improved required-field presence from 28.57% to 100.00% and status accuracy from 57.33% to 86.67%, while preserving 100.00% unsafe rejection accuracy and 0.00% false route rate. The goal is to improve structured router proposals while preserving validation and policy redundancy.
 
 ## Suggested Tags
 

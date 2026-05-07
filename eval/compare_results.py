@@ -132,7 +132,10 @@ def _best_lower(results: list[dict[str, Any]], metric: str) -> str:
     if not scored:
         return "not available"
     best = min(scored, key=lambda result: result["metrics"][metric])
-    return f"{best['name']} ({_format_metric(best['metrics'][metric])})"
+    best_value = best["metrics"][metric]
+    tied = [result for result in scored if result["metrics"][metric] == best_value]
+    names = ", ".join(result["name"] for result in tied)
+    return f"{names} ({_format_metric(best_value)})"
 
 
 def _best_safety(results: list[dict[str, Any]]) -> str:
@@ -151,10 +154,20 @@ def _best_safety(results: list[dict[str, Any]]) -> str:
             -result["metrics"]["false_route_rate"],
         ),
     )
+    best_unsafe = best["metrics"]["unsafe_rejection_accuracy"]
+    best_false_route = best["metrics"]["false_route_rate"]
+    tied = [
+        result
+        for result in scored
+        if result["metrics"]["unsafe_rejection_accuracy"] == best_unsafe
+        and result["metrics"]["false_route_rate"] == best_false_route
+    ]
+    names = ", ".join(result["name"] for result in tied)
+    label = "models" if len(tied) > 1 else "model"
     return (
-        f"{best['name']} "
-        f"(unsafe rejection {_format_metric(best['metrics']['unsafe_rejection_accuracy'])}, "
-        f"false route {_format_metric(best['metrics']['false_route_rate'])})"
+        f"{names} "
+        f"({label}; unsafe rejection {_format_metric(best_unsafe)}, "
+        f"false route {_format_metric(best_false_route)})"
     )
 
 
@@ -176,18 +189,27 @@ def _false_route_summary(results: list[dict[str, Any]]) -> str:
 
 
 def _next_improvement(results: list[dict[str, Any]]) -> str:
-    averages: dict[str, float] = {}
-    for metric in METRIC_NAMES:
-        values = [
-            result["metrics"][metric]
-            for result in results
-            if isinstance(result["metrics"].get(metric), (int, float))
-        ]
-        if values:
-            averages[metric] = sum(values) / len(values)
-
-    if not averages:
+    scored = [
+        result
+        for result in results
+        if isinstance(result["metrics"].get("unsafe_rejection_accuracy"), (int, float))
+        and isinstance(result["metrics"].get("false_route_rate"), (int, float))
+        and isinstance(result["metrics"].get("required_field_presence_accuracy"), (int, float))
+    ]
+    if not scored:
         return "run at least one evaluation to identify the weakest metric"
+
+    safe_candidates = [
+        result
+        for result in scored
+        if result["metrics"]["unsafe_rejection_accuracy"] == 1.0
+        and result["metrics"]["false_route_rate"] == 0.0
+    ]
+    candidates = safe_candidates or scored
+    reference = max(
+        candidates,
+        key=lambda result: result["metrics"]["required_field_presence_accuracy"],
+    )
 
     weaknesses = {
         "workflow_accuracy": "workflow classification",
@@ -197,9 +219,9 @@ def _next_improvement(results: list[dict[str, Any]]) -> str:
     }
     lowest_metric = min(
         weaknesses,
-        key=lambda metric: averages.get(metric, 1.0),
+        key=lambda metric: reference["metrics"].get(metric, 1.0),
     )
-    if averages.get("false_route_rate", 0.0) > 0:
+    if reference["metrics"].get("false_route_rate", 0.0) > 0:
         return "reduce false routes before optimizing convenience metrics"
     return weaknesses[lowest_metric]
 

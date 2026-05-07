@@ -86,3 +86,28 @@ The key submission story becomes stronger if the results show iteration:
 1. Deterministic baseline is safe but weak at extraction.
 2. AMD LoRA round 1 improves extraction but reveals safety regression.
 3. Safety-augmented AMD LoRA round 2 reduces that regression.
+
+## Confirmed ROCm Result
+
+The safety-tuned round 2 adapter was trained and evaluated on AMD Developer Cloud with ROCm PyTorch.
+
+Environment proof:
+
+```text
+torch: 2.9.1+rocm6.4
+torch.cuda.is_available(): True
+torch.version.hip: 6.4.43484-123eb5128
+device: AMD Instinct MI300X VF
+```
+
+Training runtime improved from the earlier CPU-backed run of about `1121s` to about `113s` on ROCm.
+
+| Metric | FakeRouter | LoRA Round 1 | Safety LoRA ROCm |
+| --- | ---: | ---: | ---: |
+| `workflow_accuracy` | 97.01% | 100.00% | 100.00% |
+| `status_accuracy` | 57.33% | 80.00% | 86.67% |
+| `required_field_presence_accuracy` | 28.57% | 91.84% | 100.00% |
+| `unsafe_rejection_accuracy` | 100.00% | 75.00% | 100.00% |
+| `false_route_rate` | 0.00% | 6.67% | 0.00% |
+
+Round 2 achieved the desired outcome: it preserved the extraction gains from fine-tuning while recovering the safety metrics.

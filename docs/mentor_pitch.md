@@ -2,7 +2,7 @@
 
 ## 30-Second Pitch
 
-RouterCore is a safe routing layer for agentic DevOps workflows. Before an agent or orchestrator touches tools, RouterCore converts a messy user request into a structured route, validates it against workflow schemas, applies policy checks, and decides whether the request should be routed, clarified, confirmed, rejected, or sent to fallback. The project demonstrates safe routing, not just routing, with a deterministic baseline and a LoRA fine-tuned router evaluated from an AMD Developer Cloud ROCm run.
+RouterCore is a safe routing layer for agentic DevOps workflows. Before an agent or orchestrator touches tools, RouterCore converts a messy user request into a structured route, validates it against workflow schemas, applies policy checks, and decides whether the request should be routed, clarified, confirmed, rejected, or sent to fallback. The project demonstrates safe routing, not just routing, with a deterministic baseline and a safety-tuned LoRA router trained on AMD Developer Cloud with ROCm.
 
 ## 2-Minute Technical Explanation
 
@@ -42,14 +42,14 @@ This makes the demo easy to understand as an agent safety layer without overbuil
 
 ## Current Results
 
-| Metric | FakeRouter | AMD LoRA |
+| Metric | FakeRouter | Safety LoRA ROCm |
 | --- | ---: | ---: |
 | `json_validity_rate` | 100.00% | 100.00% |
 | `workflow_accuracy` | 97.01% | 100.00% |
-| `status_accuracy` | 57.33% | 80.00% |
-| `required_field_presence_accuracy` | 28.57% | 91.84% |
-| `unsafe_rejection_accuracy` | 100.00% | 75.00% |
-| `false_route_rate` | 0.00% | 6.67% |
+| `status_accuracy` | 57.33% | 86.67% |
+| `required_field_presence_accuracy` | 28.57% | 100.00% |
+| `unsafe_rejection_accuracy` | 100.00% | 100.00% |
+| `false_route_rate` | 0.00% | 0.00% |
 
 ## Why Fine-Tuning Matters
 

@@ -96,4 +96,22 @@ def test_write_report_identifies_safety_and_next_improvement(tmp_path):
     assert "Best structured extraction: LoRA: routercore-qwen-lora (80.00%)" in report
     assert "Safest model: FakeRouter" in report
     assert "False route rate:" in report
-    assert "Improve next: reduce false routes" in report
+    assert "Improve next: structured parameter extraction" in report
+
+
+def test_write_report_lists_tied_safest_models(tmp_path):
+    results_dir = tmp_path / "results"
+    output_path = tmp_path / "docs" / "eval_comparison.md"
+    results_dir.mkdir()
+    _write_result(results_dir / "fakerouter_eval.json", _metrics())
+    _write_result(
+        results_dir / "lora_eval_routercore-qwen-lora-safety-rocm.json",
+        _metrics(required_field_presence_accuracy=1.0),
+        adapter="outputs/routercore-qwen-lora-safety-rocm",
+    )
+
+    _, _, report = write_report(results_dir, output_path)
+
+    assert "Safest model: FakeRouter, LoRA: routercore-qwen-lora-safety-rocm" in report
+    assert "(models; unsafe rejection 100.00%, false route 0.00%)" in report
+    assert "False route rate: remained low across available results; best is FakeRouter, LoRA: routercore-qwen-lora-safety-rocm (0.00%)" in report

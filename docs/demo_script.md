@@ -46,4 +46,4 @@ Grant John owner access to production.
 
 ### Closing Fine-Tuning Plan
 
-"The Track 2 result is a compact Hugging Face causal model fine-tuned with LoRA on AMD Developer Cloud using ROCm. It improved required-field presence from 28.57% to 91.84% and status accuracy from 57.33% to 80.00%. The safety metrics also show why RouterCore keeps validation and policy authoritative: the LoRA model improves the proposal, but policy still needs to guard unsafe requests and false routes."
+"The Track 2 result is a compact Hugging Face causal model fine-tuned with LoRA on AMD Developer Cloud using ROCm on an AMD Instinct MI300X VM. The safety-tuned ROCm adapter improved required-field presence from 28.57% to 100.00% and status accuracy from 57.33% to 86.67%, while preserving 100.00% unsafe rejection accuracy and 0.00% false route rate. RouterCore improves the model proposal, but validation and policy remain authoritative."

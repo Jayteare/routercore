@@ -16,7 +16,7 @@ RouterCore is designed for Track 2: Fine-Tuning on AMD GPUs. A compact Qwen rout
 
 It also demonstrates a Track 1-style agentic workflow pattern through the router, validator, policy layer, clarification loop, and orchestrator preview. The demo stays intentionally scoped: it previews execution plans but does not run cloud or infrastructure actions.
 
-Current AMD LoRA result: required-field presence improved from `28.57%` to `91.84%`, workflow accuracy improved from `97.01%` to `100.00%`, and status accuracy improved from `57.33%` to `80.00%`. Safety metrics also show why policy redundancy matters: the fine-tuned router had `75.00%` unsafe rejection accuracy and a `6.67%` false route rate, while the conservative policy-backed FakeRouter baseline stayed at `100.00%` unsafe rejection and `0.00%` false routes.
+Current confirmed ROCm result: a safety-tuned LoRA run on AMD Developer Cloud improved required-field presence from `28.57%` to `100.00%`, workflow accuracy from `97.01%` to `100.00%`, and status accuracy from `57.33%` to `86.67%`, while preserving `100.00%` unsafe rejection accuracy and `0.00%` false route rate.
 
 ## What It Demonstrates
 
@@ -79,7 +79,7 @@ This path is optional and local-friendly. It does not call paid APIs, and it is 
 
 ## LoRA Fine-Tuning
 
-RouterCore includes an optional LoRA training path for AMD Developer Cloud / ROCm, and it can also run anywhere PyTorch supports the selected model. The included `routercore-qwen-lora` evaluation artifact was produced from an AMD Developer Cloud ROCm run on an AMD Instinct MI300X VM.
+RouterCore includes an optional LoRA training path for AMD Developer Cloud / ROCm, and it can also run anywhere PyTorch supports the selected model. The included `routercore-qwen-lora-safety-rocm` evaluation artifact was produced from an AMD Developer Cloud ROCm run on an AMD Instinct MI300X VM.
 
 ```bash
 python -m training.format_dataset
@@ -176,7 +176,7 @@ The current router is deterministic on purpose. The LoRA experiment fine-tunes a
 }
 ```
 
-The `training/` folder includes dataset formatting, LoRA training, inference, and LoRA evaluation scripts. The first AMD Developer Cloud / ROCm run improved structured routing quality substantially, especially required-field extraction, while showing the next safety target: reduce false routes and improve unsafe rejection without losing the LoRA gains.
+The `training/` folder includes dataset formatting, LoRA training, inference, and LoRA evaluation scripts. The confirmed ROCm run used `torch 2.9.1+rocm6.4`, `torch.version.hip 6.4.43484-123eb5128`, and an `AMD Instinct MI300X VF`. The safety-tuned adapter improved structured routing quality while preserving the safety metrics that matter for agent handoff.
 
 ## Why Policy Redundancy Matters
 
