@@ -16,10 +16,15 @@ def _matches_configured_value(value: Any, allowed_or_blocked: list[Any]) -> bool
     return value in allowed_or_blocked
 
 
-def _targeted_question(missing_fields: list[str]) -> str | None:
+def _targeted_question(missing_fields: list[str], schema: WorkflowSchema) -> str | None:
     if not missing_fields:
         return None
-    readable = missing_fields[0].replace("_", " ")
+    field = missing_fields[0]
+    readable = field.replace("_", " ")
+    allowed_values = schema.allowed_values.get(field)
+    if allowed_values:
+        allowed = ", ".join(str(value) for value in allowed_values)
+        return f"What {readable} should RouterCore use? Allowed values: {allowed}."
     return f"What {readable} should RouterCore use?"
 
 
@@ -79,5 +84,5 @@ def validate_route(
         invalid_fields=invalid_fields,
         blocked_fields=blocked_fields,
         failure_reasons=failure_reasons,
-        clarifying_question=_targeted_question(missing_fields),
+        clarifying_question=_targeted_question(missing_fields, workflow_schema),
     )

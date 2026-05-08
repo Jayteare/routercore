@@ -29,10 +29,30 @@ def _preview_text(preview: Any) -> str:
     return f"{preview.message}\n\nSteps:\n{steps}\n\nParameters:\n```json\n{params}\n```"
 
 
+def _decision_summary(policy_decision: Any, validation_result: Any, state: SessionState) -> str:
+    lines = [
+        f"**Decision:** `{policy_decision.status}`",
+        f"**Workflow:** `{policy_decision.workflow or 'none'}`",
+        f"**Attempt:** `{state.attempt_count}`",
+    ]
+    if validation_result.missing_fields:
+        missing = ", ".join(f"`{field}`" for field in validation_result.missing_fields)
+        lines.append(f"**Still needed:** {missing}")
+    if policy_decision.clarifying_question:
+        lines.append(f"**Clarifying question:** {policy_decision.clarifying_question}")
+    if policy_decision.reasons:
+        lines.append("**Reason:** " + "; ".join(policy_decision.reasons))
+    if state.accumulated_context:
+        context = " | ".join(state.accumulated_context)
+        lines.append(f"**Accumulated context:** {context}")
+    return "\n\n".join(lines)
+
+
 def route_request(request_text: str):
     session = RouterCoreSession()
     router_output, validation_result, policy_decision, preview, state = session.route(request_text)
     return (
+        _decision_summary(policy_decision, validation_result, state),
         _json(router_output),
         _json(validation_result),
         _json(policy_decision),
@@ -47,6 +67,7 @@ def continue_with_clarification(request_text: str, follow_up_answer: str, state:
         follow_up_answer
     )
     return (
+        _decision_summary(policy_decision, validation_result, state),
         _json(router_output),
         _json(validation_result),
         _json(policy_decision),
@@ -96,6 +117,8 @@ def build_demo() -> gr.Blocks:
             label="Examples",
         )
 
+        decision_summary = gr.Markdown(label="Decision Summary")
+
         with gr.Row():
             router_json = gr.JSON(label="Router Output JSON")
             validation_json = gr.JSON(label="Validation Result JSON")
@@ -106,12 +129,12 @@ def build_demo() -> gr.Blocks:
         route_button.click(
             route_request,
             inputs=[request_box],
-            outputs=[router_json, validation_json, policy_json, preview_markdown, state],
+            outputs=[decision_summary, router_json, validation_json, policy_json, preview_markdown, state],
         )
         continue_button.click(
             continue_with_clarification,
             inputs=[request_box, follow_up_box, state],
-            outputs=[router_json, validation_json, policy_json, preview_markdown, state],
+            outputs=[decision_summary, router_json, validation_json, policy_json, preview_markdown, state],
         )
 
     return demo
