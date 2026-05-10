@@ -44,6 +44,7 @@ RouterCore is intentionally not a cloud execution platform. It never creates inf
 - [Evaluation Comparison](docs/eval_comparison.md)
 - [Architecture Diagram](docs/architecture.md)
 - [AMD Round 2 Safety Plan](docs/amd_round2_safety_plan.md)
+- [Pitch Deck HTML](docs/pitch_deck.html)
 
 ## Evaluation Plan
 

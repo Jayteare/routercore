@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RouterCore Pitch Deck</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #111923;
+      --panel-2: #162230;
+      --text: #f5f7fb;
+      --muted: #a9b6c7;
+      --line: #2b3a4c;
+      --orange: #ff6a00;
+      --teal: #22d3c5;
+      --blue: #65a8ff;
+      --green: #4ade80;
+      --red: #ff6b6b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #05070a;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+
+    .deck {
+      display: grid;
+      gap: 28px;
+      padding: 28px;
+    }
+
+    .slide {
+      position: relative;
+      width: min(1280px, 100%);
+      aspect-ratio: 16 / 9;
+      margin: 0 auto;
+      padding: 58px 68px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 82% 18%, rgba(34, 211, 197, 0.18), transparent 28%),
+        radial-gradient(circle at 12% 88%, rgba(255, 106, 0, 0.16), transparent 26%),
+        linear-gradient(135deg, #0b0f14 0%, #101a25 62%, #0b0f14 100%);
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      color: var(--teal);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0;
+      margin: 0 0 18px;
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 860px;
+      font-size: 78px;
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      max-width: 880px;
+      font-size: 46px;
+      line-height: 1.06;
+      letter-spacing: 0;
+      margin-bottom: 26px;
+    }
+
+    h3 {
+      font-size: 22px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 22px;
+    }
+
+    .lead {
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 25px;
+      line-height: 1.42;
+      margin-top: 28px;
+    }
+
+    .footer {
+      position: absolute;
+      left: 68px;
+      right: 68px;
+      bottom: 38px;
+      display: flex;
+      justify-content: space-between;
+      color: #718198;
+      font-size: 14px;
+    }
+
+    .accent {
+      color: var(--orange);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 26px;
+    }
+
+    .card {
+      background: rgba(17, 25, 35, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .card h3 {
+      margin: 0 0 14px;
+      color: var(--text);
+      font-size: 24px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 24px;
+      color: var(--muted);
+      font-size: 24px;
+      line-height: 1.48;
+    }
+
+    li + li {
+      margin-top: 10px;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      align-items: center;
+      margin-top: 34px;
+    }
+
+    .node {
+      min-height: 118px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(18, 29, 42, 0.88);
+      color: var(--text);
+      font-size: 21px;
+      font-weight: 750;
+      line-height: 1.18;
+    }
+
+    .arrow {
+      color: var(--orange);
+      font-size: 34px;
+      font-weight: 900;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .decisions {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+      padding: 14px 16px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .metric {
+      min-height: 116px;
+      border: 1px solid var(--line);
+      background: rgba(17, 25, 35, 0.92);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 17px;
+      margin-bottom: 12px;
+    }
+
+    .metric .value {
+      font-size: 35px;
+      font-weight: 850;
+      line-height: 1.05;
+    }
+
+    .metric .from {
+      color: #728094;
+      font-size: 18px;
+      margin-top: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 22px;
+      overflow: hidden;
+      border-radius: 12px;
+      font-size: 20px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 16px 18px;
+      text-align: right;
+      background: rgba(17, 25, 35, 0.9);
+    }
+
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+
+    th {
+      color: var(--text);
+      background: rgba(255, 106, 0, 0.16);
+      font-size: 18px;
+    }
+
+    td {
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .good {
+      color: var(--green);
+    }
+
+    .warn {
+      color: var(--orange);
+    }
+
+    .mono {
+      font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+    }
+
+    .quote {
+      margin-top: 42px;
+      max-width: 900px;
+      font-size: 37px;
+      line-height: 1.18;
+      font-weight: 820;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.45;
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .deck {
+        display: block;
+        padding: 0;
+      }
+
+      .slide {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        box-shadow: none;
+        border: 0;
+        page-break-after: always;
+        break-after: page;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide">
+      <p class="eyebrow">AMD Developer Hackathon · Track 2</p>
+      <h1>RouterCore</h1>
+      <p class="lead">Safe routing for AI agents, fine-tuned on AMD Developer Cloud with ROCm.</p>
+      <h3>AMD Instinct MI300X · Qwen LoRA · Hugging Face · Gradio</h3>
+      <div class="footer">
+        <span>Safe routing, not just routing.</span>
+        <span>1 / 6</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">Problem</p>
+      <h2>AI agents should not execute messy DevOps requests directly.</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Users ask messy things</h3>
+          <ul>
+            <li>"Create a Python app for finance."</li>
+            <li>"Set up reporting."</li>
+            <li>"Grant owner access to production."</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Agents need a gate</h3>
+          <ul>
+            <li>Is the request complete?</li>
+            <li>Is it safe?</li>
+            <li>Should it route, clarify, confirm, reject, or fallback?</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer">
+        <span>RouterCore handles the step before execution.</span>
+        <span>2 / 6</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">Architecture</p>
+      <h2>The model proposes. Validation and policy decide.</h2>
+      <div class="pipeline">
+        <div class="node">User<br />Request</div>
+        <div class="node">Router<br />Proposal</div>
+        <div class="node">Schema<br />Validator</div>
+        <div class="node">Policy<br />Engine</div>
+        <div class="node">Final<br />Decision</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="decisions">
+        <div class="pill">Accepted Route</div>
+        <div class="pill">Clarification Loop</div>
+        <div class="pill">Confirmation</div>
+        <div class="pill">Rejection</div>
+        <div class="pill">Fallback</div>
+      </div>
+      <p class="lead">Accepted or confirmed routes generate an orchestrator preview only. Rejected requests stop without execution.</p>
+      <div class="footer">
+        <span>Policy remains authoritative.</span>
+        <span>3 / 6</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">AMD Fine-Tuning</p>
+      <h2>Safety-tuned Qwen LoRA on AMD Developer Cloud.</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Training setup</h3>
+          <ul>
+            <li>Base model: Qwen2.5-0.5B-Instruct</li>
+            <li>Fine-tuning: PEFT LoRA</li>
+            <li>Dataset: synthetic DevOps routing JSONL</li>
+            <li>Runtime: AMD Developer Cloud</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>ROCm proof</h3>
+          <ul>
+            <li class="mono">torch 2.9.1+rocm6.4</li>
+            <li class="mono">HIP 6.4.43484</li>
+            <li>AMD Instinct MI300X VF</li>
+            <li>Training time: ~1121s → ~113s</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer">
+        <span>Cloud GPU access made the fine-tuning loop practical.</span>
+        <span>4 / 6</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">Results</p>
+      <h2>Fine-tuning improved structured routing while preserving safety.</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>FakeRouter</th>
+            <th>Safety LoRA ROCm</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Required-field presence</td>
+            <td>28.57%</td>
+            <td class="good">100.00%</td>
+          </tr>
+          <tr>
+            <td>Status accuracy</td>
+            <td>57.33%</td>
+            <td class="good">86.67%</td>
+          </tr>
+          <tr>
+            <td>Workflow accuracy</td>
+            <td>97.01%</td>
+            <td class="good">100.00%</td>
+          </tr>
+          <tr>
+            <td>Unsafe rejection accuracy</td>
+            <td class="good">100.00%</td>
+            <td class="good">100.00%</td>
+          </tr>
+          <tr>
+            <td>False route rate</td>
+            <td class="good">0.00%</td>
+            <td class="good">0.00%</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="footer">
+        <span>Round 2 safety data recovered safe-routing behavior.</span>
+        <span>5 / 6</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="eyebrow">Takeaway</p>
+      <h2>RouterCore demonstrates safe routing, not just routing.</h2>
+      <p class="quote">Fine-tuning improves the router proposal. Schema validation and policy remain authoritative before agent handoff.</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>What works now</h3>
+          <ul>
+            <li>Live Gradio Space</li>
+            <li>Validated workflow schemas</li>
+            <li>Policy-aware rejection and confirmation</li>
+            <li>ROCm LoRA evaluation results</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Next steps</h3>
+          <ul>
+            <li>Broader adversarial routing dataset</li>
+            <li>Prompted-base-model comparison</li>
+            <li>Optional adapter publishing on Hugging Face</li>
+            <li>More workflow schemas</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer">
+        <span>github.com/Jayteare/routercore</span>
+        <span>6 / 6</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
